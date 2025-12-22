@@ -1,0 +1,50 @@
+page:
+  home:
+    title: 这是Home的标题！
+  profile:
+    title: 这是Profile的标题！
+
+network_errors:
+  network_error: 网络请求错误，无法正常发送请求
+  network_offline: 网络断开或者未连接
+  connection_error: 网络请求错误，一般是无法服务器建立TCP连接
+  bad_certificate: 网络建立时证书不正确
+  bad_request: 客户端请求参数格式错误，服务器无法理解
+  unauthorized: 求需要用户身份认证。客户端没有提供凭证，或者凭证无效/过期
+  payment_required: 该请求需要付费。HTTP 规范里定义了，但基本没被广泛使用。
+  forbidden_error: 服务器拒绝访问，没有权限访问资源
+  not_found: HTTP层请求的资源不存在，服务器找不到对应的 URL
+  method_not_allowed: 请求方法（GET/POST/PUT/DELETE…）对该资源不被允许
+  not_acceptable: 请求的资源无法根据请求头生成客户端可接受的内容格式。
+  request_timeout: 客户端发起请求超时，(包括TCP握手, 发送到接收整个流程)， 超时可以共用
+  conflict: 请求和服务器资源的当前状态冲突
+  gone: 求的资源已被永久删除，并且不会再提供。
+  payload_too_large: 请求体（比如上传文件）太大，服务器无法或不愿处理。
+  # 415 错误，服务器不支持请求中的媒体格式。
+  unsupported_media_type: File format not supported.
+  # 429 错误，用户在给定时间内发送了过多请求，被限流(HTTP层)。
+  too_many_requests: Too many attempts. Please slow down.
+  # 500 错误，服务器遇到未预料的错误，无法完成请求。
+  system_error: Server error. Please try again later.
+  # 501错误，服务器不支持请求的方法或功能。
+  not_implemented: This feature is not available .
+  # 502 错误， 作为网关或代理的服务器，从上游服务器收到无效响应。，
+  gateway_bad: Temporary server issue. We're on it.
+  # 503 错误， 服务器暂时不可用，可能是过载或维护。
+  service_unavailable: Service temporarily unavailable. Please try again later.
+  # 504 错误，网关或代理等待上游服务器响应超时。
+  gateway_timeout: Request timed out. Please try again
+
+  # 505 错误，服务器不支持请求使用的 HTTP 协议版本。
+  http_version_not_supported: This version is not supported. Please update the app.
+  # 网络请求错误，一般是与服务器建立TCP连接超时
+  connection_timeout: Connection timeout. Please check your network.
+  # 客户端侧数据包发送超时
+  send_timeout: Please check your network.
+  # 客户端侧接收服务端数据超时
+  receive_timeout: Response timed out. Please try again.
+  # 业务层服务器资源未找到，一般都以请求url为前缀，Not found是后缀
+  request_not_found: Not found
+  # 未知的服务器错误，一般接收响应时异常用到，场景比较少，几乎不存在，这里可以兜底
+  unavailable_system_error: Something went wrong. Please try again later
+  request_error: Something went wrong. Please try again later

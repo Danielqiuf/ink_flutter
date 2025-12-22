@@ -1,0 +1,9 @@
+# 折叠 Freezed 和 json_serializable 自动生成的文件
+
+*.g.dart linguist-generated=true
+*.freezed.dart linguist-generated=true
+
+# 自动合并batch构建号文件，不会冲突
+android/.buildmeta/build_seq.txt merge=keepTheirs
+
+*.pbxproj text eol=lf

@@ -1,0 +1,12 @@
+targets:
+  $default:
+    builders:
+      json_serializable:
+        generate_for:
+          - lib/apis/**/**.dart
+      freezed:
+        generate_for:
+          - lib/apis/**/**.dart
+      go_router_builder:
+        generate_for:
+          - lib/app/router/router.dart
