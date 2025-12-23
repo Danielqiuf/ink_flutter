@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ink_self_projects/core/di/container_provider.dart';
 import 'package:ink_self_projects/shared/tools/system.dart';
 
-import '../../locale/translations.g.dart';
+import '../../__locale__/translations.g.dart';
 import '../di/locale_provider.dart';
 import '../ext/sizing_ext.dart';
 import 'app_initializer.dart';
@@ -14,30 +14,27 @@ import 'bootstrap_result.dart';
 ///
 /// 初始化+构造
 ///
-class AppBootstrap extends StatefulWidget {
-  const AppBootstrap({super.key});
+class BootstrapRunner extends StatefulWidget {
+  const BootstrapRunner({super.key});
 
-  AppBootstrap.preserve() : super(key: const Key('bootstrap')) {
+  BootstrapRunner.preserve() : super(key: const Key('bootstrap')) {
     FlutterNativeSplash.preserve(widgetsBinding: WidgetsBinding.instance);
   }
 
-  static const envMap = {
-    "development": "env/dev.env",
-    "production": "env/prod.env",
-  };
+  static const envMap = {"dev": "env/dev.env", "prod": "env/prod.env"};
+
+  static const defaultEnv = "env/dev.env";
 
   @override
-  State<StatefulWidget> createState() => _AppBootstrap();
+  State<StatefulWidget> createState() => _BootstrapRunnerState();
 }
 
-class _AppBootstrap extends State<AppBootstrap> {
+class _BootstrapRunnerState extends State<BootstrapRunner> {
   BootstrapResult? _result;
 
   @override
   void initState() {
     super.initState();
-
-    AppBootstrap.preserve();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
@@ -51,7 +48,7 @@ class _AppBootstrap extends State<AppBootstrap> {
 
   Future<void> _bootstrap() async {
     final result = await AppInitializer(
-      envFile: AppBootstrap.envMap[kEnv] ?? 'dev.env',
+      envFile: BootstrapRunner.envMap[kFlavorEnv] ?? BootstrapRunner.defaultEnv,
     ).run();
 
     setState(() => _result = result);

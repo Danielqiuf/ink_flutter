@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ink_self_projects/shared/ui/toast/providers/toast_provider.dart';
+import 'package:ink_self_projects/shared/ui/toast/toast_provider.dart';
 
-import '../../../locale/translations.g.dart';
+import '../../../__locale__/translations.g.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});

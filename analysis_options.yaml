@@ -14,6 +14,7 @@ linter:
   rules:
     use_string_in_part_of_directives: false
     unnecessary_library_name: false
+    curly_braces_in_flow_control_structures: false
 analyzer:
   exclude:
     - "**/*.g.dart"

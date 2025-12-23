@@ -5,6 +5,7 @@ import 'package:ink_self_projects/core/network/contains/api_business_code.dart';
 import 'package:ink_self_projects/core/network/shared/net_extra.dart';
 import 'package:ink_self_projects/core/network/shared/tools.dart';
 import 'package:ink_self_projects/shared/tools/log.dart';
+import 'package:ink_self_projects/shared/tools/type_guard.dart';
 
 ///
 /// Token时效性验证 (Token过期刷新)
@@ -157,17 +158,16 @@ class AuthorizationMiddleware extends Interceptor {
   }
 
   static int? _extractBizCode(dynamic data) {
-    if (data is Map) {
-      final v = data['code'];
-      if (v is int) return v;
-      if (v is String) return int.tryParse(v);
+    if (TypeGuard.asMapOf(data) case final d?) {
+      if (TypeGuard.asInt(d['code']) case final v?) return v;
+      if (TypeGuard.asString(d['code']) case final v?) return int.tryParse(v);
     }
     return null;
   }
 
   static void _unwrapParamsForRetry(RequestOptions ro) {
-    final data = ro.data;
-    if (data is Map && data['params'] != null) {
+    if (TypeGuard.asMapOf(ro.data) case final data?
+        when data['params'] != null) {
       ro.data = data['params'];
     }
   }

@@ -1,6 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
 
+///
+/// 日志工具
+///
 class TaggedMessage {
   final String tag;
   final String message;
@@ -33,22 +36,115 @@ final logger = Logger(
 );
 
 class Log {
-  ///先固定 TAG，再打日志（更像 Android 的：private static final String TAG = "xxx";）
+  Log._();
+
+  /// 默认 TAG
+  static const String defaultTag = 'APP';
+
+  /// 先固定 TAG，再打日志（Android 风格）
   static TagLogger tag(String tag) => TagLogger._(tag);
+
+  /// Info
+  static void i(
+    String message, {
+    String? tag,
+    Object? error,
+    StackTrace? stackTrace,
+    bool withStackTrace = false, // 主动打印当前调用堆栈
+  }) {
+    logger.i(
+      TaggedMessage(tag ?? defaultTag, message),
+      error: error,
+      stackTrace: stackTrace ?? (withStackTrace ? StackTrace.current : null),
+    );
+  }
+
+  /// Debug
+  static void d(
+    String message, {
+    String? tag,
+    Object? error,
+    StackTrace? stackTrace,
+    bool withStackTrace = false,
+  }) {
+    logger.d(
+      TaggedMessage(tag ?? defaultTag, message),
+      error: error,
+      stackTrace: stackTrace ?? (withStackTrace ? StackTrace.current : null),
+    );
+  }
+
+  /// Trace
+  static void t(
+    String message, {
+    String? tag,
+    Object? error,
+    StackTrace? stackTrace,
+    bool withStackTrace = false,
+  }) {
+    logger.t(
+      TaggedMessage(tag ?? defaultTag, message),
+      error: error,
+      stackTrace: stackTrace ?? (withStackTrace ? StackTrace.current : null),
+    );
+  }
+
+  /// Warning
+  static void w(
+    String message, {
+    String? tag,
+    Object? error,
+    StackTrace? stackTrace,
+    bool withStackTrace = false,
+  }) {
+    logger.w(
+      TaggedMessage(tag ?? defaultTag, message),
+      error: error,
+      stackTrace: stackTrace ?? (withStackTrace ? StackTrace.current : null),
+    );
+  }
+
+  /// Error：默认带 StackTrace.current
+  static void e(
+    String message, {
+    String? tag,
+    Object? error,
+    StackTrace? stackTrace,
+  }) {
+    logger.e(
+      TaggedMessage(tag ?? defaultTag, message),
+      error: error,
+      stackTrace: stackTrace ?? StackTrace.current,
+    );
+  }
+
+  /// Fatal：默认带 StackTrace.current
+  static void f(
+    String message, {
+    String? tag,
+    Object? error,
+    StackTrace? stackTrace,
+  }) {
+    logger.f(
+      TaggedMessage(tag ?? defaultTag, message),
+      error: error,
+      stackTrace: stackTrace ?? StackTrace.current,
+    );
+  }
 
   static void I(
     String tag,
     String message, {
     Object? error,
     StackTrace? stackTrace,
-    bool withStackTrace = false, // 主动打印当前调用堆栈
-  }) {
-    logger.i(
-      TaggedMessage(tag, message),
-      error: error,
-      stackTrace: stackTrace ?? (withStackTrace ? StackTrace.current : null),
-    );
-  }
+    bool withStackTrace = false,
+  }) => i(
+    message,
+    tag: tag,
+    error: error,
+    stackTrace: stackTrace,
+    withStackTrace: withStackTrace,
+  );
 
   static void D(
     String tag,
@@ -56,13 +152,13 @@ class Log {
     Object? error,
     StackTrace? stackTrace,
     bool withStackTrace = false,
-  }) {
-    logger.d(
-      TaggedMessage(tag, message),
-      error: error,
-      stackTrace: stackTrace ?? (withStackTrace ? StackTrace.current : null),
-    );
-  }
+  }) => d(
+    message,
+    tag: tag,
+    error: error,
+    stackTrace: stackTrace,
+    withStackTrace: withStackTrace,
+  );
 
   static void T(
     String tag,
@@ -70,13 +166,13 @@ class Log {
     Object? error,
     StackTrace? stackTrace,
     bool withStackTrace = false,
-  }) {
-    logger.t(
-      TaggedMessage(tag, message),
-      error: error,
-      stackTrace: stackTrace ?? (withStackTrace ? StackTrace.current : null),
-    );
-  }
+  }) => t(
+    message,
+    tag: tag,
+    error: error,
+    stackTrace: stackTrace,
+    withStackTrace: withStackTrace,
+  );
 
   static void W(
     String tag,
@@ -84,39 +180,27 @@ class Log {
     Object? error,
     StackTrace? stackTrace,
     bool withStackTrace = false,
-  }) {
-    logger.w(
-      TaggedMessage(tag, message),
-      error: error,
-      stackTrace: stackTrace ?? (withStackTrace ? StackTrace.current : null),
-    );
-  }
+  }) => w(
+    message,
+    tag: tag,
+    error: error,
+    stackTrace: stackTrace,
+    withStackTrace: withStackTrace,
+  );
 
   static void E(
     String tag,
     String message, {
     Object? error,
     StackTrace? stackTrace,
-  }) {
-    logger.e(
-      TaggedMessage(tag, message),
-      error: error,
-      stackTrace: stackTrace ?? StackTrace.current,
-    );
-  }
+  }) => e(message, tag: tag, error: error, stackTrace: stackTrace);
 
   static void F(
     String tag,
     String message, {
     Object? error,
     StackTrace? stackTrace,
-  }) {
-    logger.f(
-      TaggedMessage(tag, message),
-      error: error,
-      stackTrace: stackTrace ?? StackTrace.current,
-    );
-  }
+  }) => f(message, tag: tag, error: error, stackTrace: stackTrace);
 }
 
 /// 固定 TAG 的 logger
@@ -129,9 +213,9 @@ class TagLogger {
     Object? error,
     StackTrace? stackTrace,
     bool withStackTrace = false,
-  }) => Log.I(
-    _tag,
+  }) => Log.i(
     msg,
+    tag: _tag,
     error: error,
     stackTrace: stackTrace,
     withStackTrace: withStackTrace,
@@ -142,9 +226,9 @@ class TagLogger {
     Object? error,
     StackTrace? stackTrace,
     bool withStackTrace = false,
-  }) => Log.D(
-    _tag,
+  }) => Log.d(
     msg,
+    tag: _tag,
     error: error,
     stackTrace: stackTrace,
     withStackTrace: withStackTrace,
@@ -155,9 +239,9 @@ class TagLogger {
     Object? error,
     StackTrace? stackTrace,
     bool withStackTrace = false,
-  }) => Log.T(
-    _tag,
+  }) => Log.t(
     msg,
+    tag: _tag,
     error: error,
     stackTrace: stackTrace,
     withStackTrace: withStackTrace,
@@ -168,19 +252,19 @@ class TagLogger {
     Object? error,
     StackTrace? stackTrace,
     bool withStackTrace = false,
-  }) => Log.W(
-    _tag,
+  }) => Log.w(
     msg,
+    tag: _tag,
     error: error,
     stackTrace: stackTrace,
     withStackTrace: withStackTrace,
   );
 
   void e(String msg, {Object? error, StackTrace? stackTrace}) =>
-      Log.E(_tag, msg, error: error, stackTrace: stackTrace);
+      Log.e(msg, tag: _tag, error: error, stackTrace: stackTrace);
 
   void f(String msg, {Object? error, StackTrace? stackTrace}) =>
-      Log.F(_tag, msg, error: error, stackTrace: stackTrace);
+      Log.f(msg, tag: _tag, error: error, stackTrace: stackTrace);
 }
 
 ///

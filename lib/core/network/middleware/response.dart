@@ -5,7 +5,8 @@ import 'package:ink_self_projects/core/di/container_provider.dart';
 import 'package:ink_self_projects/core/network/contains/api_business_code.dart';
 import 'package:ink_self_projects/core/network/shared/net_extra.dart';
 import 'package:ink_self_projects/core/network/shared/tools.dart';
-import 'package:ink_self_projects/shared/ui/toast/providers/toast_provider.dart';
+import 'package:ink_self_projects/shared/tools/type_guard.dart';
+import 'package:ink_self_projects/shared/ui/toast/toast_provider.dart';
 
 import '../../../shared/tools/log.dart';
 import '../contains/api_http_code.dart';
@@ -48,7 +49,7 @@ class ResponseMiddleware extends Interceptor {
       return handler.next(response);
     }
 
-    final code = data['code'] is int ? data['code'] as int : -1;
+    final code = TypeGuard.asInt(data['code']) ?? -1;
 
     if (code == ApiBusinessCode.success) {
       return handler.next(response);

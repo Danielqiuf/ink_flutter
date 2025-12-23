@@ -15,7 +15,8 @@ ios/build/
 
 lib/gen/
 lib/gen_a/
-lib/i18n/
+lib/__locale__/
+lib/__assets__/
 
 # Flutter generated files
 ios/Flutter/Flutter.framework

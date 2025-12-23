@@ -1,7 +1,10 @@
-import '../../../locale/translations.g.dart';
+import '../../../__locale__/translations.g.dart';
 import '../contains/api_http_code.dart';
 
-final localeMessageMapper = <int?, String>{
+///
+/// Http层响应错误文案映射
+///
+final localeHttpMessageMapper = <int?, String>{
   ApiHttpCode.badRequest: t.networkErrors.badRequest, // 400
   ApiHttpCode.unauthorized: t.networkErrors.unauthorized, // 401
   ApiHttpCode.paymentRequired: t.networkErrors.paymentRequired, // 402

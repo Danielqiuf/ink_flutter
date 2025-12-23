@@ -2,6 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 
+///
+/// 系统变量工具
+///
+
 /// 获取OS
 final String os = Platform.operatingSystem;
 
@@ -9,9 +13,16 @@ final mediaData = MediaQueryData.fromView(
   WidgetsBinding.instance.platformDispatcher.views.first,
 );
 
+// 编译环境，只有development和production
 const String kEnv = String.fromEnvironment(
   'ENVIRONMENT',
   defaultValue: 'development',
+);
+
+// 接口环境, dev/prod
+const String kFlavorEnv = String.fromEnvironment(
+  "FLAVOR_ENV",
+  defaultValue: "dev",
 );
 
 const String kEnvMode = String.fromEnvironment(

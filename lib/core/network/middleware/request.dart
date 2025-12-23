@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:ink_self_projects/core/network/shared/net_extra.dart';
 import 'package:ink_self_projects/core/network/shared/public_data.dart';
 import 'package:ink_self_projects/core/network/shared/tools.dart';
+import 'package:ink_self_projects/shared/tools/type_guard.dart';
 
 import '../../../shared/tools/log.dart';
 import '../shared/signature.dart';
@@ -50,19 +51,19 @@ class RequestMiddleware extends Interceptor {
   bool _alreadyHasUserId(RequestOptions options) {
     if (_hasNonEmpty(options.queryParameters[_userIdKey])) return true;
 
-    final data = options.data;
-
-    if (data is Map) {
+    if (TypeGuard.asMapOf<String, dynamic>(options.data) case final data?) {
       // 直接传 user_id
       if (_hasNonEmpty(data[_userIdKey])) return true;
 
       // 已经封装成 {public, params} 的情况
-      final params = data[_paramsKey];
-      if (params is Map && _hasNonEmpty(params[_userIdKey])) return true;
+
+      if (TypeGuard.asMapOf<String, dynamic>(data[_paramsKey])
+          case final params? when _hasNonEmpty(params[_userIdKey]))
+        return true;
     }
 
-    if (data is FormData) {
-      final existed = data.fields.any(
+    if (options.data is FormData) {
+      final existed = options.data.fields.any(
         (e) => e.key == _userIdKey && e.value.trim().isNotEmpty,
       );
       if (existed) return true;
@@ -136,15 +137,14 @@ class RequestMiddleware extends Interceptor {
       'needUserId=true but body is ${data.runtimeType}, fallback user_id to query',
     );
 
-    if (data is Map) {
-      final map = Map<String, dynamic>.from(data.cast<String, dynamic>());
+    if (TypeGuard.asMapOf<String, dynamic>(data) case final d?) {
+      final map = Map<String, dynamic>.from(d);
 
       // 老逻辑：如果已经是 {public:..., params:...}，就取 params 继续追加
       final maybeParams = map[_paramsKey];
-      if (map.containsKey(_publicKey) && maybeParams is Map) {
-        params.addAll(
-          Map<String, dynamic>.from(maybeParams.cast<String, dynamic>()),
-        );
+      if (TypeGuard.asMapOf<String, dynamic>(maybeParams) case final mp?
+          when map.containsKey(_publicKey)) {
+        params.addAll(mp);
       } else {
         // 否则把整个 body 当作 params
         params.addAll(map);
@@ -189,8 +189,8 @@ class RequestMiddleware extends Interceptor {
     extra[NetExtra.userId] = needUserId;
 
     final hdr = extra[NetExtra.headers];
-    if (hdr is Map) {
-      options.headers.addAll(hdr.cast<String, dynamic>());
+    if (TypeGuard.asMapOf<String, dynamic>(hdr) case final hdrr?) {
+      options.headers.addAll(hdrr);
     }
 
     final rt = extra[NetExtra.responseType];
@@ -206,8 +206,8 @@ class RequestMiddleware extends Interceptor {
     }
 
     void applyTimeout(String key, void Function(Duration d) setter) {
-      final ms = extra[key];
-      if (ms is int && ms > 0) setter(Duration(milliseconds: ms));
+      if (TypeGuard.asInt(extra[key]) case final ms? when ms > 0)
+        setter(Duration(milliseconds: ms));
     }
 
     applyTimeout(NetExtra.connectTimeoutMs, (d) => options.connectTimeout = d);

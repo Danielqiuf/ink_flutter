@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:ink_self_projects/core/network/shared/tools.dart';
+import 'package:ink_self_projects/shared/tools/log.dart';
+import 'package:ink_self_projects/shared/tools/type_guard.dart';
 
 import '../errors/api_error_mapper.dart';
 import '../shared/net_extra.dart';
@@ -25,6 +27,8 @@ class ErrorMiddleware extends Interceptor {
 
     final ro = normalized.requestOptions;
     final extra = ro.extra;
+
+    Log.E("Request Error", "${normalized.message}");
 
     // 若这是重试fetch导致的 error,直接透传给外层 while 循环.避免递归 onError
     if (extra[NetExtra.retrying] == true) {
@@ -140,15 +144,16 @@ class ErrorMiddleware extends Interceptor {
 }
 
 List<String>? _stringList(Object? v) {
-  if (v is List) return v.map((e) => e.toString().toUpperCase()).toList();
+  if (TypeGuard.asListOf(v) case final list?)
+    return list.map((e) => e.toString().toUpperCase()).toList();
   return null;
 }
 
 List<int>? _intList(Object? v) {
-  if (v is List) {
+  if (TypeGuard.asListOf(v) case final list?) {
     final out = <int>[];
-    for (final e in v) {
-      final n = (e is int) ? e : int.tryParse(e.toString());
+    for (final e in list) {
+      final n = TypeGuard.asInt(e) ?? int.tryParse(e.toString());
       if (n != null) out.add(n);
     }
     return out;
@@ -180,8 +185,7 @@ Duration _computeRetryDelay({
 }
 
 void _unwrapParamsForRetry(RequestOptions ro) {
-  final data = ro.data;
-  if (data is Map && data['params'] != null) {
+  if (TypeGuard.asMapOf(ro.data) case final data? when data['params'] != null) {
     ro.data = data['params'];
   }
 }

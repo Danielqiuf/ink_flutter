@@ -8,7 +8,7 @@ import 'package:ink_self_projects/app/router/di/router_provider.dart';
 import 'package:ink_self_projects/core/bootstrap/bootstrap_provider.dart';
 import 'package:ink_self_projects/core/di/container_provider.dart';
 
-import '../../shared/ui/toast/providers/toast_provider.dart';
+import '../../shared/ui/toast/toast_provider.dart';
 import '../di/locale_provider.dart';
 
 class AppRoot extends ConsumerWidget {

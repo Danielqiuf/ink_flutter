@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../toast.dart';
+import 'toast.dart';
 
 final toastOverlayKeyProvider = Provider<GlobalKey<OverlayState>>((ref) {
   return GlobalKey<OverlayState>();

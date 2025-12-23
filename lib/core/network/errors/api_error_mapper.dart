@@ -3,7 +3,7 @@ import 'package:ink_self_projects/core/network/contains/api_business_code.dart';
 
 import 'api_error.dart';
 import 'api_error_type.dart';
-import 'locale_error_message.dart';
+import 'locale_http_error_message.dart';
 
 class ApiErrorMapper {
   static ApiError fromDio(DioException e) {
@@ -38,7 +38,7 @@ class ApiErrorMapper {
       return ApiError(
         ApiErrorType.http,
         code: httpCode,
-        message: localeMessageMapper[httpCode]!,
+        message: localeHttpMessageMapper[httpCode]!,
         raw: raw ?? r,
       );
     }
@@ -46,7 +46,7 @@ class ApiErrorMapper {
     final data = r.data;
     if (data is Map<String, dynamic>) {
       final code = data['code'];
-      final msg = (data['msg'] as String?) ?? localeMessageMapper[code]!;
+      final msg = (data['msg'] as String?) ?? localeHttpMessageMapper[code]!;
 
       if (code is int) {
         // token失效

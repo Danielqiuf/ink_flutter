@@ -15,8 +15,8 @@ class AppInitializer {
     await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     await dotenv.load(fileName: envFile);
 
-    final initial = '/home';
+    final initialLocation = '/home';
 
-    return BootstrapResult(initialLocation: initial, localeCode: 'en');
+    return BootstrapResult(initialLocation: initialLocation, localeCode: 'en');
   }
 }

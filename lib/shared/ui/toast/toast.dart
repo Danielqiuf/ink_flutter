@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -10,79 +9,81 @@ class Toast {
 
   final GlobalKey<OverlayState> _overlayKey;
 
-  final Queue<_ToastRequest> _queue = Queue<_ToastRequest>();
-  bool _isFlushing = false;
-
   OverlayEntry? _currentEntry;
   _ToastEntryController? _currentController;
 
-  void show(
-    String message, {
-    Duration duration = const Duration(seconds: 2),
-    bool replaceCurrent = true,
-  }) {
-    if (message.trim().isEmpty) return;
+  _ToastRequest? _nextLatest;
 
-    _queue.add(
-      _ToastRequest(
-        message: message,
-        duration: duration,
-        replaceCurrent: replaceCurrent,
-      ),
-    );
-    _flush();
+  bool get _isShowing => _currentEntry != null;
+
+  /// 语义：
+  /// - show 时如果已有 toast：立即触发当前 toast 退场动画
+  /// - 退场动画结束后：显示最新那条（中间的会被覆盖）
+  void show(String message, {Duration duration = const Duration(seconds: 2)}) {
+    final m = message.trim();
+    if (m.isEmpty) return;
+
+    _nextLatest = _ToastRequest(message: m, duration: duration);
+
+    if (!_isShowing) {
+      _consumeNextAndShow();
+      return;
+    }
+
+    // 每次 show 都尝试让当前 toast 退场
+    // _ToastView 内部会用 _isDismissing 幂等，重复调用没副作用
+    _currentController?.dismiss();
   }
 
   void hideCurrent() => _currentController?.dismiss();
 
   void clearAll() {
-    _queue.clear();
+    _nextLatest = null;
     hideCurrent();
   }
 
-  void _flush() {
-    if (_isFlushing) return;
-    _isFlushing = true;
+  // ---------------- internals ----------------
 
-    Future<void>(() async {
-      while (_queue.isNotEmpty) {
-        final req = _queue.removeFirst();
+  void _consumeNextAndShow() {
+    final req = _nextLatest;
+    if (req == null) return;
+    _nextLatest = null;
+    _displayNow(req);
+  }
 
-        final overlay = _overlayKey.currentState;
-        if (overlay == null) {
-          await _waitNextFrame();
-          _queue.addFirst(req);
-          continue;
-        }
+  Future<void> _displayNow(_ToastRequest req) async {
+    // overlay 可能还没 ready
+    final overlay = _overlayKey.currentState;
+    if (overlay == null) await _waitNextFrame();
+    final realOverlay = _overlayKey.currentState;
+    if (realOverlay == null) return;
 
-        if (req.replaceCurrent) {
-          _currentController?.dismiss(immediate: true);
-          _removeCurrentEntry();
-        }
+    final done = Completer<void>();
+    final controller = _ToastEntryController(
+      onDone: () {
+        if (!done.isCompleted) done.complete();
+      },
+    );
+    _currentController = controller;
 
-        final done = Completer<void>();
-        final controller = _ToastEntryController(
-          onDone: () {
-            if (!done.isCompleted) done.complete();
-          },
-        );
-        _currentController = controller;
+    final entry = OverlayEntry(
+      builder: (context) => _ToastView(
+        message: req.message,
+        duration: req.duration,
+        controller: controller,
+      ),
+    );
 
-        final entry = OverlayEntry(
-          builder: (context) => _ToastView(
-            message: req.message,
-            duration: req.duration,
-            controller: controller,
-          ),
-        );
+    _currentEntry = entry;
+    realOverlay.insert(entry);
 
-        _currentEntry = entry;
-        overlay.insert(entry);
+    // 等待退场动画结束
+    await done.future;
 
-        await done.future;
-        _removeCurrentEntry();
-      }
-    }).whenComplete(() => _isFlushing = false);
+    _removeCurrentEntry();
+
+    // 如果退场期间又 show 了新的，继续显示最新
+    _consumeNextAndShow();
   }
 
   void _removeCurrentEntry() {
@@ -99,14 +100,9 @@ class Toast {
 }
 
 class _ToastRequest {
-  _ToastRequest({
-    required this.message,
-    required this.duration,
-    required this.replaceCurrent,
-  });
+  _ToastRequest({required this.message, required this.duration});
   final String message;
   final Duration duration;
-  final bool replaceCurrent;
 }
 
 class _ToastEntryController {
@@ -160,8 +156,8 @@ class _ToastViewState extends State<_ToastView>
 
     _ac = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 220),
-      reverseDuration: const Duration(milliseconds: 180),
+      duration: const Duration(milliseconds: 160),
+      reverseDuration: const Duration(milliseconds: 110),
     );
 
     _opacity = CurvedAnimation(
@@ -170,7 +166,6 @@ class _ToastViewState extends State<_ToastView>
       reverseCurve: Curves.easeInCubic,
     );
 
-    // 轻微“弹簧”：进场 easeOutBack / 退场 easeInBack
     _scale = Tween<double>(begin: 0.92, end: 1.0).animate(
       CurvedAnimation(
         parent: _ac,
@@ -238,6 +233,7 @@ class _ToastViewState extends State<_ToastView>
                           color: Colors.white,
                           height: 1.25,
                         ),
+                        textAlign: TextAlign.center,
                         softWrap: true,
                       ),
                     ),
