@@ -1,4 +1,4 @@
-part of base_router;
+part of base.router;
 
 ///
 ///  dart run build_runner build -d

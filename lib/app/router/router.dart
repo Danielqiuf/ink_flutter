@@ -1,8 +1,10 @@
-library base_router;
+library base.router;
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ink_self_projects/app/router/styled_route_data.dart';
 import 'package:ink_self_projects/app/screens/home/presentation/detail_screen.dart';
+import 'package:ink_self_projects/shared/ui/system/system_status_bar_theme.dart';
 
 import '../screens/home/home_screen.dart';
 import '../screens/login/login_screen.dart';

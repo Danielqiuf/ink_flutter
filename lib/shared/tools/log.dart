@@ -92,7 +92,6 @@ class Log {
     );
   }
 
-  /// E/F：默认如果你没传 stackTrace，我就用当前堆栈（方便快速定位）
   static void E(
     String tag,
     String message, {
@@ -120,7 +119,7 @@ class Log {
   }
 }
 
-/// 固定 TAG 的 logger（更像 Android 的按类划分 TAG）
+/// 固定 TAG 的 logger
 class TagLogger {
   final String _tag;
   TagLogger._(this._tag);
@@ -182,4 +181,18 @@ class TagLogger {
 
   void f(String msg, {Object? error, StackTrace? stackTrace}) =>
       Log.F(_tag, msg, error: error, stackTrace: stackTrace);
+}
+
+///
+/// 没有Tag的日志
+/// "log日志".le();
+/// "log日志".lw();
+/// ....
+///
+extension LoggerExt on String {
+  void le() => logger.e(this);
+  void lf() => logger.f(this);
+  void li() => logger.i(this);
+  void lt() => logger.t(this);
+  void lw() => logger.w(this);
 }

@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:ink_self_projects/core/network/shared/net_extra.dart';
 import 'package:ink_self_projects/core/network/shared/public_data.dart';
+import 'package:ink_self_projects/core/network/shared/tools.dart';
 
 import '../../../shared/tools/log.dart';
 import '../shared/signature.dart';
@@ -116,47 +117,60 @@ class RequestMiddleware extends Interceptor {
     final params = <String, dynamic>{};
     final data = options.data;
 
-    if (data is Map) {
-      final maybeParams = data[_paramsKey];
-      if (data.containsKey(_publicKey) && maybeParams is Map) {
-        params.addAll(
-          Map<String, dynamic>.from(maybeParams.cast<String, dynamic>()),
-        );
-      } else {
-        params.addAll(Map<String, dynamic>.from(data.cast<String, dynamic>()));
+    if (data == null) {
+      if (shouldAddUserId) params[_userIdKey] = uid;
+      if (options.queryParameters.isNotEmpty) {
+        params.addAll(options.queryParameters);
       }
-    } else {
-      if (shouldAddUserId) {
-        options.queryParameters = {
-          ...options.queryParameters,
-          _userIdKey: uid!,
-        };
-      }
-      Log.I(
-        'DioClient Request',
-        'body is ${data.runtimeType}, skip wrap(public/params/sig).',
+
+      options.data = Signature.buildPayload(
+        publicMap: publicData,
+        paramsMap: params,
+        privateKey: privateKey,
       );
       return;
     }
-
-    if (options.queryParameters.isNotEmpty) {
-      params.addAll(options.queryParameters);
-    }
-
-    if (shouldAddUserId) {
-      params[_userIdKey] = uid;
-    }
-
-    options.data = Signature.buildPayload(
-      publicMap: publicData,
-      paramsMap: params,
-      privateKey: privateKey,
-    );
 
     Log.I(
       'DioClient Request',
       'needUserId=true but body is ${data.runtimeType}, fallback user_id to query',
     );
+
+    if (data is Map) {
+      final map = Map<String, dynamic>.from(data.cast<String, dynamic>());
+
+      // 老逻辑：如果已经是 {public:..., params:...}，就取 params 继续追加
+      final maybeParams = map[_paramsKey];
+      if (map.containsKey(_publicKey) && maybeParams is Map) {
+        params.addAll(
+          Map<String, dynamic>.from(maybeParams.cast<String, dynamic>()),
+        );
+      } else {
+        // 否则把整个 body 当作 params
+        params.addAll(map);
+      }
+
+      // query 合并进 params（保持你原逻辑）
+      if (options.queryParameters.isNotEmpty) {
+        params.addAll(options.queryParameters);
+      }
+
+      if (shouldAddUserId) {
+        // body 里没 uid 才加（前面 shouldAddUserId 已保证不覆盖）
+        params[_userIdKey] = uid;
+      }
+
+      options.data = Signature.buildPayload(
+        publicMap: publicData,
+        paramsMap: params,
+        privateKey: privateKey,
+      );
+      return;
+    }
+
+    if (shouldAddUserId) {
+      options.queryParameters = {...options.queryParameters, _userIdKey: uid!};
+    }
   }
 
   @override
@@ -166,9 +180,9 @@ class RequestMiddleware extends Interceptor {
   ) async {
     final extra = options.extra;
 
-    final log = (extra[NetExtra.log] as bool?) ?? defaultLog;
-    final auth = (extra[NetExtra.auth] as bool?) ?? defaultAuth;
-    final needUserId = (extra[NetExtra.userId] as bool?) ?? defaultUserId;
+    final log = boolExtraByMap(extra, NetExtra.log, defaultLog);
+    final auth = boolExtraByMap(extra, NetExtra.auth, defaultAuth);
+    final needUserId = boolExtraByMap(extra, NetExtra.userId, defaultUserId);
 
     extra[NetExtra.log] = log;
     extra[NetExtra.auth] = auth;

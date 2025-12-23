@@ -24,6 +24,7 @@ class DioClient {
       connectTimeout: connectTimeout,
       receiveTimeout: receiveTimeout,
       sendTimeout: sendTimeout,
+      contentType: Headers.jsonContentType,
       headers: {'Accept': 'application/json', ...defaultHeaders},
       responseType: ResponseType.json,
       validateStatus: (code) => code != null && code >= 200 && code < 300,

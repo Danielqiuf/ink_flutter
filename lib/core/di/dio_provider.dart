@@ -1,4 +1,24 @@
-part of middleware;
+import 'dart:io';
+
+///
+/// 拦截器中间件
+///
+
+import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ink_self_projects/apis/api_hub.dart';
+import 'package:ink_self_projects/core/di/env_provider.dart';
+import 'package:ink_self_projects/core/network/shared/public_data.dart';
+import 'package:ink_self_projects/locale/translations.g.dart';
+import 'package:ink_self_projects/shared/tools/device.dart';
+
+import '../network/dio_client.dart';
+import '../network/middleware/authorization.dart';
+import '../network/middleware/connectivity.dart';
+import '../network/middleware/error.dart';
+import '../network/middleware/request.dart';
+import '../network/middleware/response.dart';
+import '../network/middleware/throttle.dart';
 
 ///
 /// Dio Provider
@@ -40,3 +60,13 @@ final publicDataProvider = Provider<PublicDataProvider>(
     },
   ),
 );
+
+///
+/// re
+///
+final apiHubProvider = Provider<ApiHub>((ref) {
+  final dio = ref.read(dioProvider);
+  final host = ref.read(envProvider).apiBaseUrl;
+
+  return ApiHub(dio: dio, host: host);
+});

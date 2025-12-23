@@ -63,6 +63,12 @@ class ResponseMiddleware extends Interceptor {
       );
     }
 
+    // token失效判断
+    if (isTokenInvalid(code)) {
+      showToastIfNeeded(apiError.message, extra: extra);
+      return handler.next(response);
+    }
+
     final bool passUserBannedHandler = boolExtraByMap(
       extra,
       NetExtra.passByUserBanned,

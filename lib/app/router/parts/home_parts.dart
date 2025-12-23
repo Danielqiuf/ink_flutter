@@ -1,4 +1,4 @@
-part of base_router;
+part of base.router;
 
 const homeRoute = TypedGoRoute<HomeRoute>(
   path: '/home',
@@ -7,19 +7,26 @@ const homeRoute = TypedGoRoute<HomeRoute>(
   ],
 );
 
-class HomeRoute extends GoRouteData with _$HomeRoute {
+class HomeRoute extends StyledRouteData with _$HomeRoute {
   const HomeRoute();
 
   @override
-  Widget build(BuildContext context, GoRouterState state) => const HomeScreen();
+  StatusBarTheme get statusBarTheme => StatusBarTheme.dark;
+
+  @override
+  Widget buildScreen(BuildContext context, GoRouterState state) =>
+      const HomeScreen();
 }
 
-class DetailRoute extends GoRouteData with _$DetailRoute {
+class DetailRoute extends StyledRouteData with _$DetailRoute {
   const DetailRoute({required this.id});
 
   final int id;
 
   @override
-  Widget build(BuildContext context, GoRouterState state) =>
+  StatusBarTheme get statusBarTheme => StatusBarTheme.light;
+
+  @override
+  Widget buildScreen(BuildContext context, GoRouterState state) =>
       const DetailScreen();
 }

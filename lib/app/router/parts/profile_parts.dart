@@ -1,11 +1,14 @@
-part of base_router;
+part of base.router;
 
 const profileRoute = TypedGoRoute<ProfileRoute>(path: '/profile');
 
-class ProfileRoute extends GoRouteData with _$ProfileRoute {
+class ProfileRoute extends StyledRouteData with _$ProfileRoute {
   const ProfileRoute();
 
   @override
-  Widget build(BuildContext context, GoRouterState state) =>
+  StatusBarTheme get statusBarTheme => StatusBarTheme.light;
+
+  @override
+  Widget buildScreen(BuildContext context, GoRouterState state) =>
       const ProfileScreen();
 }

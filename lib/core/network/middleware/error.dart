@@ -129,7 +129,7 @@ class ErrorMiddleware extends Interceptor {
         if (!canRetryMore) break;
         // else continue loop
       } finally {
-        // 重要：本轮结束清理 _retrying，让下一轮 fetch 再设置
+        // 本轮结束清理 _retrying，让下一轮 fetch 再设置
         extra.remove(NetExtra.retrying);
       }
     }

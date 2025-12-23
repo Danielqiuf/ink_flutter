@@ -1,4 +1,4 @@
-part of base_router;
+part of base.router;
 
 @TypedGoRoute<LoginRoute>(path: '/login')
 class LoginRoute extends GoRouteData with _$LoginRoute {

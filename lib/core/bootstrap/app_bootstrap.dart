@@ -11,6 +11,9 @@ import 'app_initializer.dart';
 import 'app_root.dart';
 import 'bootstrap_result.dart';
 
+///
+/// 初始化+构造
+///
 class AppBootstrap extends StatefulWidget {
   const AppBootstrap({super.key});
 
@@ -34,7 +37,7 @@ class _AppBootstrap extends State<AppBootstrap> {
   void initState() {
     super.initState();
 
-    FlutterNativeSplash.preserve(widgetsBinding: WidgetsBinding.instance);
+    AppBootstrap.preserve();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {

@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:ink_self_projects/core/network/contains/api_business_code.dart';
 import 'package:ink_self_projects/core/network/shared/net_extra.dart';
 import 'package:ink_self_projects/core/network/shared/tools.dart';
+import 'package:ink_self_projects/shared/tools/log.dart';
 
 ///
 /// Token时效性验证 (Token过期刷新)
@@ -47,6 +48,7 @@ class AuthorizationMiddleware extends Interceptor {
   }
 
   static Future<void> _defaultRefreshToken() async {
+    "开始_refreshToken---".li();
     // TODO: 用真实的 refresh token API 替换，并在成功后写入新的 access token
     await Future.delayed(const Duration(milliseconds: 700));
   }
@@ -57,8 +59,10 @@ class AuthorizationMiddleware extends Interceptor {
     ResponseInterceptorHandler handler,
   ) async {
     final ro = response.requestOptions;
+
     if (_skipWhen(ro)) return handler.next(response);
 
+    "token refresh 过期..".lw();
     // 业务 code token 失效（常见：HTTP 200 但 code 表示 token 过期）
     final bizCode = _extractBizCode(response.data);
     if (bizCode == null || !isTokenInvalid(bizCode)) {

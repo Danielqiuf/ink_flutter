@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ink_self_projects/app/router/di/router_provider.dart';
+import 'package:ink_self_projects/core/bootstrap/bootstrap_provider.dart';
+import 'package:ink_self_projects/core/di/container_provider.dart';
 
+import '../../shared/ui/toast/providers/toast_provider.dart';
 import '../di/locale_provider.dart';
 
 class AppRoot extends ConsumerWidget {
@@ -15,6 +18,8 @@ class AppRoot extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final locale = ref.watch(localeProvider);
+
+    ref.watch(bootstrapProvider);
 
     final baseTheme = ThemeData(
       scaffoldBackgroundColor: Colors.transparent,
@@ -52,13 +57,19 @@ class AppRoot extends ConsumerWidget {
       routerConfig: router,
       builder: (ctx, child) {
         final mq = MediaQuery.of(ctx);
-        return MediaQuery(
-          data: mq.copyWith(
-            // 禁用字体缩放
-            textScaler: const TextScaler.linear(1.0),
+        final overlayKey = container.read(toastOverlayKeyProvider);
+
+        final wrapped = MediaQuery(
+          data: mq.copyWith(textScaler: const TextScaler.linear(1.0)),
+          child: Overlay(
+            key: overlayKey,
+            initialEntries: [
+              OverlayEntry(builder: (_) => child ?? const SizedBox.shrink()),
+            ],
           ),
-          child: child!,
         );
+
+        return wrapped;
       },
     );
   }
