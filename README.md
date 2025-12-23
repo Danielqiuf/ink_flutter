@@ -1,6 +1,6 @@
 # ink_self_projects
 
-A new Flutter project.
+Flutter + RiverPod + Dio + Retrofit + Annotation Gen + Spider + Slang + Hive + Sqflite + Go Router
 
 ## 运行
 
