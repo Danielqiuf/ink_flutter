@@ -14,7 +14,7 @@ Flutter + RiverPod + Dio + Retrofit + Annotation Gen + Spider + Slang + Hive + S
 
 - 安装 `dart pub global activate spider`
 - 检查是否安装成功 `dart pub global run spider --help`
-- 生成资产常量文件 **\_\_assets\_\_** `dart pub global run spider build`
+- 生成资产常量文件 **\_\_assets.g\_\_** `dart pub global run spider build`
 
 ---------------------------------------------------
 
@@ -53,10 +53,10 @@ Flutter + RiverPod + Dio + Retrofit + Annotation Gen + Spider + Slang + Hive + S
 ### 产物目录
 以下为代码生成的目录，不计入git中，需要自己手动执行命令生成
 
-| # | 模块           | 目录（相对 `lib/`） | 层级 |                  作用 |
-|--:|--------------|---------------| -: | -: |
-| 1 | `__assets__` | `__assets__/` |  1 | 应用资产常量，通过`Spider`生成 |
-| 2 | `__locale__` | `__locale__/` |  1 | 多语言常量，通过`slang`生成 |
+| # | 模块             | 目录（相对 `lib/`）   | 层级 |                  作用 |
+|--:|----------------|-----------------| -: | -: |
+| 1 | `__assets.g__` | `__assets.g__/` |  1 | 应用资产常量，通过`Spider`生成 |
+| 2 | `__locale.g__` | `__locale.g__/` |  1 | 多语言常量，通过`slang`生成 |
 
 -------------------------------------
 

@@ -5,7 +5,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ink_self_projects/__locale__/translations.g.dart';
+import 'package:ink_self_projects/__locale.g__/translations.g.dart';
 import 'package:ink_self_projects/apis/api_hub.dart';
 import 'package:ink_self_projects/core/di/env_provider.dart';
 import 'package:ink_self_projects/core/network/shared/public_data.dart';

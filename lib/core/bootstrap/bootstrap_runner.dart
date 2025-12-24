@@ -2,9 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ink_self_projects/core/di/container_provider.dart';
+import 'package:ink_self_projects/core/di/storage_provider.dart';
 import 'package:ink_self_projects/shared/tools/system.dart';
 
-import '../../__locale__/translations.g.dart';
+import '../../__locale.g__/translations.g.dart';
 import '../di/locale_provider.dart';
 import '../ext/sizing_ext.dart';
 import 'app_initializer.dart';
@@ -67,11 +68,12 @@ class _BootstrapRunnerState extends State<BootstrapRunner> {
     return ProviderScope(
       overrides: [
         localeProvider.overrideWith((ref) => Locale(result!.localeCode)),
+        authBoxProvider.overrideWithValue(result!.authBox),
       ],
-      child: UncontrolledProviderScope(
-        container: container,
-        child: TranslationProvider(
-          child: AppRoot(initialLocation: result!.initialLocation),
+      child: TranslationProvider(
+        child: UncontrolledProviderScope(
+          container: container,
+          child: AppRoot(initialLocation: result.initialLocation),
         ),
       ),
     );

@@ -1,7 +1,10 @@
 import 'package:drift/drift.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ink_self_projects/apis/user/user_models.dart';
 import 'package:ink_self_projects/core/storage/dao/user_mapper.dart';
 import 'package:ink_self_projects/core/storage/db.dart';
+
+import '../../di/storage_provider.dart';
 
 class UserDao {
   final Db _db;
@@ -62,3 +65,8 @@ class UserDao {
     )..orderBy([(t) => OrderingTerm.desc(t.id)])).watch();
   }
 }
+
+final userDaoProvider = Provider<UserDao>((ref) {
+  final db = ref.watch(dbProvider);
+  return UserDao(db);
+});

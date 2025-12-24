@@ -1,4 +1,4 @@
-import '../../../__locale__/translations.g.dart';
+import '../../../__locale.g__/translations.g.dart';
 import '../contains/api_http_code.dart';
 
 ///

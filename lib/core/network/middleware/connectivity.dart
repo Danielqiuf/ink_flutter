@@ -6,7 +6,7 @@ import 'package:ink_self_projects/core/network/shared/net_extra.dart';
 import 'package:ink_self_projects/core/network/shared/tools.dart';
 import 'package:ink_self_projects/shared/ui/toast/toast_provider.dart';
 
-import '../../../__locale__/translations.g.dart';
+import '../../../__locale.g__/translations.g.dart';
 import '../../../shared/tools/connectivity.dart';
 
 ///

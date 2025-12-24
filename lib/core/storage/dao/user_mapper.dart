@@ -2,7 +2,9 @@ import 'package:drift/drift.dart';
 import 'package:ink_self_projects/apis/user/user_models.dart';
 import 'package:ink_self_projects/core/storage/db.dart';
 
+///
 /// 同UserinfoModel映射成UserRowModel
+///
 extension UserRowModelMapper on UserinfoModel {
   DbUsersCompanion toInsertCompanion({int? nowMillis}) {
     final ts = nowMillis ?? DateTime.now().millisecondsSinceEpoch;

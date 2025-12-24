@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ink_self_projects/__assets__/resources.dart';
-import 'package:ink_self_projects/__locale__/translations.g.dart';
+import 'package:ink_self_projects/__assets.g__/resources.dart';
+import 'package:ink_self_projects/__locale.g__/translations.g.dart';
 import 'package:ink_self_projects/core/ext/sizing_ext.dart';
 import 'package:ink_self_projects/shared/ui/button/scale_alpha_button.dart';
 import 'package:ink_self_projects/shared/ui/images/apex_image.dart';

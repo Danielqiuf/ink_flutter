@@ -1,5 +1,12 @@
+import 'package:hive/hive.dart';
+
 class BootstrapResult {
   final String initialLocation;
   final String localeCode;
-  BootstrapResult({required this.initialLocation, required this.localeCode});
+  final Box<dynamic> authBox;
+  BootstrapResult({
+    required this.initialLocation,
+    required this.localeCode,
+    required this.authBox,
+  });
 }
