@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 ///
-/// 对接口进行参数传递
+/// 对接口发起前进行参数传递
 /// @Extra({
 ///   NetExtra.log: true,
 ///   NetExtra.auth: false

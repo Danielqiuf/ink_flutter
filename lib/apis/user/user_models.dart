@@ -5,6 +5,7 @@ part 'user_models.g.dart';
 
 ///
 /// 用户信息
+/// [FieldRename.snake] 自动把下环线映射成驼峰，不用再写JsonKey
 ///
 @freezed
 abstract class UserinfoModel with _$UserinfoModel {
@@ -25,8 +26,4 @@ abstract class UserinfoModel with _$UserinfoModel {
 
   factory UserinfoModel.fromJson(Map<String, dynamic> json) =>
       _$UserinfoModelFromJson(json);
-
-  // 转成db map
-  static Map<String, Object?> toDbMap() =>
-      <String, Object?>{}..removeWhere((k, v) => v == null);
 }

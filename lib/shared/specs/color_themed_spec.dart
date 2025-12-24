@@ -14,7 +14,6 @@ class ColorFreeSpec {
     required this.mask40,
     required this.mask60,
 
-    // 你们可能会用到的固定业务色（示例）
     required this.pureRed,
     required this.pureGreen,
   });
@@ -96,7 +95,7 @@ final class ColorThemedSpec extends ThemeExtension<ColorThemedSpec> {
     pureGreen: Color(0xFF00FF00),
   );
 
-  /// Light 默认值（按你们设计稿替换）
+  /// Light 默认值
   static const light = ColorThemedSpec(
     primary: Color(0xFF2F6BFF),
     onPrimary: Color(0xFFFFFFFF),
@@ -118,7 +117,7 @@ final class ColorThemedSpec extends ThemeExtension<ColorThemedSpec> {
     warning: Color(0xFFF79009),
   );
 
-  /// Dark 默认值（按你们设计稿替换）
+  /// Dark 默认值
   static const dark = ColorThemedSpec(
     primary: Color(0xFF7AA2FF),
     onPrimary: Color(0xFF0B1020),

@@ -1,9 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:ink_self_projects/core/network/contains/api_business_code.dart';
 
+import '../../../__locale.g__/translations.g.dart';
 import 'api_error.dart';
 import 'api_error_type.dart';
-import 'locale_http_error_message.dart';
+import 'locale_http_error_mapper.dart';
 
 class ApiErrorMapper {
   static ApiError fromDio(DioException e) {
@@ -13,13 +14,25 @@ class ApiErrorMapper {
 
     switch (e.type) {
       case DioExceptionType.cancel:
-        return ApiError(ApiErrorType.cancelled, message: '请求已取消', raw: e);
+        return ApiError(
+          ApiErrorType.cancelled,
+          message: "request cancelled",
+          raw: e,
+        );
       case DioExceptionType.connectionTimeout:
       case DioExceptionType.sendTimeout:
       case DioExceptionType.receiveTimeout:
-        return ApiError(ApiErrorType.timeout, message: '请求超时，请稍后重试', raw: e);
+        return ApiError(
+          ApiErrorType.timeout,
+          message: t.networkErrors.requestTimeout,
+          raw: e,
+        );
       case DioExceptionType.connectionError:
-        return ApiError(ApiErrorType.offline, message: '网络不可用，请检查网络', raw: e);
+        return ApiError(
+          ApiErrorType.offline,
+          message: t.networkErrors.networkOffline,
+          raw: e,
+        );
       default:
         break;
     }
@@ -27,7 +40,11 @@ class ApiErrorMapper {
     final r = e.response;
     if (r != null) return fromResponse(r, raw: e);
 
-    return ApiError(ApiErrorType.unknown, message: '未知错误', raw: e);
+    return ApiError(
+      ApiErrorType.unknown,
+      message: t.networkErrors.networkError,
+      raw: e,
+    );
   }
 
   static ApiError fromResponse(Response r, {Object? raw}) {
@@ -92,7 +109,7 @@ class ApiErrorMapper {
 
     return ApiError(
       ApiErrorType.unknown,
-      message: 'Unknown Error.',
+      message: t.networkErrors.networkError,
       raw: raw ?? r,
     );
   }

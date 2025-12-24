@@ -23,7 +23,7 @@ class AuthorizationMiddleware extends Interceptor {
 
   final Dio _dio;
 
-  /// 外部注入：真正的 refresh token 逻辑（内部应把新 token 写入你的存储里）。
+  /// 外部注入：真正的 refresh token 逻辑
   final Future<void> Function() _refreshToken;
 
   /// 外部注入：哪些请求需要跳过（例如 refresh/login 自己、或明确不需要鉴权的接口）。

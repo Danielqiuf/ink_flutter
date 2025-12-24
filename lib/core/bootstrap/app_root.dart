@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ink_self_projects/app/router/di/router_provider.dart';
+import 'package:ink_self_projects/app/router/router_provider.dart';
 import 'package:ink_self_projects/core/bootstrap/bootstrap_provider.dart';
 import 'package:ink_self_projects/core/di/container_provider.dart';
 import 'package:ink_self_projects/shared/specs/typography_themed_spec.dart';

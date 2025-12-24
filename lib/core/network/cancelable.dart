@@ -2,8 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// 一个 provider 生命周期内的 CancelToken 管理器：
-/// - next(): 生成新 token，并自动 cancel 旧 token（避免并发/过期覆盖）
-/// - dispose(): provider 销毁时自动 cancel
+/// next(): 生成新 token，并自动 cancel 旧 token, 避免并发/过期覆盖
+/// dispose(): provider 销毁时自动 cancel
 final class CancelTokenPool {
   CancelTokenPool(this._ref) {
     _ref.onDispose(() => cancel('provider disposed'));

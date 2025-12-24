@@ -3,6 +3,11 @@ import 'package:drift_flutter/drift_flutter.dart';
 
 part 'db.g.dart';
 
+///
+/// Drift Db初始化
+/// [schemaVersion] 数据库版本号
+/// [migration] 数据库迁移方案
+///
 @DriftDatabase(include: {'schemas/users_schema.drift'})
 class Db extends _$Db {
   static const String dbName = "self_ink.db";
