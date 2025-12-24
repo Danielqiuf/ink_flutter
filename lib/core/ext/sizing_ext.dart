@@ -30,7 +30,7 @@ class Sizing {
     final clampedW = min(logicalW, _maxLogicalW);
     _scaleW = clampedW / _designW;
 
-    // 字体缩放可以比布局缩放“更保守”一些（可选：开方或插值）
+    // 字体缩放可以比布局缩放更保守一些
     final raw = _scaleW; // 也可用 sqrt(_scaleW)
     _fontScale = raw.clamp(fontMin, fontMax);
   }
@@ -43,6 +43,6 @@ extension Px on num {
   /// 尺寸按“屏宽/设计宽”线性缩放
   double get dp => this * Sizing.scaleW;
 
-  /// 字体缩放可与 dp 不同（一般更保守）
+  /// 字体缩放可与 dp 不同
   double get sp => this * Sizing.fontScale;
 }

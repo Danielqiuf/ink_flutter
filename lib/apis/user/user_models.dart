@@ -25,4 +25,8 @@ abstract class UserinfoModel with _$UserinfoModel {
 
   factory UserinfoModel.fromJson(Map<String, dynamic> json) =>
       _$UserinfoModelFromJson(json);
+
+  // 转成db map
+  static Map<String, Object?> toDbMap() =>
+      <String, Object?>{}..removeWhere((k, v) => v == null);
 }

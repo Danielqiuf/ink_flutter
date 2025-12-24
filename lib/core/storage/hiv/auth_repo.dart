@@ -3,6 +3,7 @@ import 'package:hive/hive.dart';
 import 'package:ink_self_projects/core/di/storage_provider.dart';
 
 ///
+/// Hive Key-Value
 /// 授权类存储
 /// user_id token
 ///

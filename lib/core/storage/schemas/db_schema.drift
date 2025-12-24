@@ -1,0 +1,17 @@
+
+CREATE TABLE db_users(
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL AS userId,
+    age INTEGER NOT NULL,
+    sex INTEGER NOT NULL,
+    birth INTEGER NOT NULL,
+    username TEXT,
+    avatar_url TEXT AS avatarUrl,
+    login_type INTEGER DEFAULT 1 AS loginType,
+    gold REAL DEFAULT 0,
+    created_at INTEGER NOT NULL AS createdAt,
+    UNIQUE(user_id)
+) AS UserRowModel;
+
+CREATE INDEX IF NOT EXISTS idx_user_id ON db_users(user_id);
+CREATE INDEX IF NOT EXISTS idx_user_created_at ON db_users(created_at);

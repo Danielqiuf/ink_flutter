@@ -59,3 +59,66 @@ Flutter + RiverPod + Dio + Retrofit + Annotation Gen + Spider + Slang + Hive + S
 | 2 | `__locale__` | `__locale__/` |  1 | 多语言常量，通过`slang`生成 |
 
 -------------------------------------
+
+## 存储
+存储有用到Hive和Drift， Hive只管简单的Key-Value存储， Drift则需要在数据复杂且有关系的情况下使用，自动根据表字段生成对应的实体模型类({name}RowModel)
+
+### Key-Value Hive
+在`core/storage/hiv`目录下， 通过后缀`_repo`来区分这是一个Hive的存储类。
+
+#### 创建存储类
+创建一个{name}Repo，通过`_k`前缀来指定KEY的常量， 最后通过`_box`来写入和读取.
+```dart 
+class AuthLocalRepo {
+  AuthLocalRepo(this._box);
+
+  final Box _box;
+
+  static const String _kToken = "_k_token";
+  static const String _kUserId = "_k_uid";
+
+  String? get token => _box.get(_kToken) as String?;
+  String? get userId => _box.get(_kUserId) as String?;
+
+  Future<void> setToken(String? token) async {
+    if (token != null) {
+      await _box.put(_kToken, token);
+    }
+  }
+
+  Future<void> setUid(String? uid) async {
+    if (uid != null) {
+      await _box.put(_kUserId, uid);
+    }
+  }
+}
+```
+最后通过`RiverPod`特性，创建一个全局的Provider
+```dart
+final authLocalRepoProvider = Provider<AuthLocalRepo>((ref) {
+  final box = ref.watch(authBoxProvider);
+  return AuthLocalRepo(box);
+});
+```
+
+在Widget中使用。 **`StatelessWidget记得要缓存ConsumerWidget， StatefulWidget记得要换成ConsumerStatefulWidget`**：
+```dart
+
+class Widget extends ConsumerWidget {
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    
+    return Scaffold(
+      body: GestureDetector(
+        onTap:() async {
+         await ref.read(authLocalRepoProvider).setToken("token value");
+        },
+        child: Text("设置Token数据")
+      )
+    );
+  }
+}
+```
+-----------------------------
+### Sqflite DB数据库存储
