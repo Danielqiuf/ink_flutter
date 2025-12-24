@@ -69,3 +69,5 @@ flutter:
   assets:
     - env/dev.env
     - env/prod.env
+    - assets/images/background/
+    - assets/images/icons/

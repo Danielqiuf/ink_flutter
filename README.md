@@ -1,6 +1,6 @@
 # ink_self_projects
 
-Flutter + RiverPod + Dio + Retrofit + Annotation Gen + Spider + Slang + Hive + Sqflite + Go Router
+Flutter + RiverPod + Dio + Retrofit + Annotation Gen + Spider + Slang + Hive + Drift + Go Router
 
 ## 运行
 
@@ -61,8 +61,8 @@ Flutter + RiverPod + Dio + Retrofit + Annotation Gen + Spider + Slang + Hive + S
 -------------------------------------
 
 ## 存储
-存储有用到Hive和Drift， Hive只管简单的Key-Value存储， Drift则需要在数据复杂且有关系的情况下使用，自动根据表字段生成对应的实体模型类({name}RowModel)
-
+- 存储有用到Hive和Drift， Hive只管简单的Key-Value存储， Drift则需要在数据复杂且有关系的情况下使用，自动根据表字段生成对应的实体模型类({name}RowModel)
+- [Drift](https://pub.dev/packages/drift)替代Sqflite，通过文件`.drift`来维护sql表，与`.sql`一致。最终通过`build_runner`生成产物
 ### Key-Value Hive
 在`core/storage/hiv`目录下， 通过后缀`_repo`来区分这是一个Hive的存储类。
 

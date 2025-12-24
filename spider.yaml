@@ -32,4 +32,9 @@ package: __assets.g__
 groups:
   - path: assets/images/background/
     class_name: BackgroundImages
+    prefix: bg
+    types: [ .png, .jpg, .jpeg ]
+  - path: assets/images/icons/
+    class_name: IconImages
+    prefix: icon
     types: [ .png, .jpg, .jpeg ]

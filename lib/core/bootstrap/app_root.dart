@@ -7,7 +7,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ink_self_projects/app/router/di/router_provider.dart';
 import 'package:ink_self_projects/core/bootstrap/bootstrap_provider.dart';
 import 'package:ink_self_projects/core/di/container_provider.dart';
+import 'package:ink_self_projects/shared/specs/typography_themed_spec.dart';
 
+import '../../shared/specs/color_themed_spec.dart';
 import '../../shared/ui/toast/toast_provider.dart';
 import '../di/locale_provider.dart';
 
@@ -25,9 +27,12 @@ class AppRoot extends ConsumerWidget {
       scaffoldBackgroundColor: Colors.transparent,
       useMaterial3: true,
       fontFamily: null,
-      //  使用 iOS 的排版基线（间距/字号等更接近 iOS）
+      //  使用 iOS 的排版基线
       platform: TargetPlatform.iOS,
-      typography: Typography.material2021(platform: TargetPlatform.iOS),
+      extensions: const <ThemeExtension<dynamic>>[
+        ColorThemedSpec.light,
+        TypographyThemedSpec(),
+      ],
       cupertinoOverrideTheme: CupertinoThemeData(
         textTheme: CupertinoTextThemeData(
           textStyle: TextStyle(decoration: TextDecoration.none),
@@ -48,6 +53,12 @@ class AppRoot extends ConsumerWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       theme: theme,
+      darkTheme: theme.copyWith(
+        extensions: const <ThemeExtension<dynamic>>[
+          ColorThemedSpec.dark,
+          TypographyThemedSpec(),
+        ],
+      ),
       locale: locale,
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
