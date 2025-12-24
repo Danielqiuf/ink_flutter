@@ -1,5 +1,8 @@
 targets:
   $default:
+    sources:
+      - lib/**
+      - $package$
     builders:
       json_serializable:
         generate_for:
@@ -10,3 +13,11 @@ targets:
       go_router_builder:
         generate_for:
           - lib/app/router/router.dart
+      drift_dev:
+        generate_for:
+          - lib/core/storage/db.dart
+          - lib/core/storage/schemas/*.drift
+        options:
+          # 生成代码更少，通常也会更快
+          skip_verification_code: true
+          data_class_to_companions: false

@@ -3,7 +3,7 @@ import 'package:drift_flutter/drift_flutter.dart';
 
 part 'db.g.dart';
 
-@DriftDatabase(include: {'schemas/db_schema.drift'})
+@DriftDatabase(include: {'schemas/users_schema.drift'})
 class Db extends _$Db {
   static const String dbName = "self_ink.db";
   static const int dbVersion = 1;

@@ -1,4 +1,4 @@
-
+-- 用户表
 CREATE TABLE db_users(
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL AS userId,
@@ -13,5 +13,6 @@ CREATE TABLE db_users(
     UNIQUE(user_id)
 ) AS UserRowModel;
 
+-- 查询索引
 CREATE INDEX IF NOT EXISTS idx_user_id ON db_users(user_id);
 CREATE INDEX IF NOT EXISTS idx_user_created_at ON db_users(created_at);
